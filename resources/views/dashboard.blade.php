@@ -1,7 +1,7 @@
 @extends('layouts/default')
 {{-- Page title --}}
 @section('title')
-{{ trans('general.my awesome dashboard') }}
+{{ trans('general.this is awesome dashboard') }}
 @parent
 @stop
 
