@@ -40,6 +40,7 @@ jobs:
           IMAGE_TAG: ${{ github.event.head_commit.message }}
         run: |
           echo $IMAGE_TAG
+          terraform destroy -auto-approve -input=false
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
@@ -59,6 +60,7 @@ jobs:
           terraform validate -no-color
           terraform plan -no-color -input=false
           terraform apply -auto-approve -input=false
+      
 #       - name: Terraform Plan
 #         id: plan
 #         if: github.event_name == 'pull_request'
