@@ -6,7 +6,8 @@ on:
     branches: [ "master" ]
   pull_request:
     branches:
-    - master
+      - master
+    types: [closed]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -64,7 +65,7 @@ jobs:
               
       - name: Terraform Plan
         id: plan
-        if: github.event_name == 'pull_request'
+        if: github.event.pull_request.merged == true
         run: |
           echo ${{github.event_name}}
           cd terraform_with_ALB
