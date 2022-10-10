@@ -4,6 +4,9 @@ on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
     branches: [ "master" ]
+  pull_request:
+    branches:
+    - master
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -41,8 +44,6 @@ jobs:
         run: |
           echo $IMAGE_TAG
           cd terraform_with_ALB
-          terraform init
-          terraform destroy -auto-approve -input=false
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
@@ -58,51 +59,53 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: |
+          echo ${{github.event_name}}
           cd terraform_with_ALB          
           terraform validate -no-color
           terraform plan -no-color -input=false
           terraform apply -auto-approve -input=false
       
-#       - name: Terraform Plan
-#         id: plan
-#         if: github.event_name == 'pull_request'
-#         run: |
-#           cd terraform_with_ALB
-#           terraform plan -no-color -input=false
-#         continue-on-error: true
-#       - name: Update Pull Request
-#         uses: actions/github-script@v6
-#         if: github.event_name == 'pull_request'
-#         env:
-#           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-#         with:
-#           github-token: ${{ secrets.GITHUB_TOKEN }}
-#           script: |
-#             const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-#             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-#             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-#             #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+      - name: Terraform Plan
+        id: plan
+        if: github.event_name == 'pull_request'
+        run: |
+          echo ${{github.event_name}}
+          cd terraform_with_ALB
+          terraform plan -no-color -input=false
+        continue-on-error: true
+      - name: Update Pull Request
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
 
-#             <details><summary>Show Plan</summary>
+            <details><summary>Show Plan</summary>
 
-#             \`\`\`\n
-#             ${process.env.PLAN}
-#             \`\`\`
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
 
-#             </details>
+            </details>
 
-#             *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
 
-#             github.rest.issues.createComment({
-#               issue_number: context.issue.number,
-#               owner: context.repo.owner,
-#               repo: context.repo.repo,
-#               body: output
-#             })
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
           
-#       - name: Terraform Plan Status
-#         if: steps.plan.outcome == 'failure'
-#         run: exit 1
-#       - name: Terraform Apply
-#         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-#         run: terraform apply -auto-approve -input=false
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
