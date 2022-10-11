@@ -40,9 +40,6 @@ jobs:
           IMAGE_TAG: ${{ github.event.head_commit.message }}
         run: |
           echo $IMAGE_TAG
-          cd terraform_with_ALB
-          terraform init
-          terraform destroy -auto-approve -input=false
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
