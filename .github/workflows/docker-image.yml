@@ -2,12 +2,8 @@
 name: "workflow"
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
-#   push:
-#     branches: [ "master" ]
-  pull_request:
-    branches:
-      - master
-    types: [closed]
+  push:
+    branches: [ "master" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -59,15 +55,12 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: |
-          echo ${{github.event_name}}
           cd terraform_with_ALB          
           terraform validate -no-color
               
       - name: Terraform Plan
         id: plan
-        if: github.event.pull_request.merged == true
         run: |
-          echo ${{github.event_name}}
           cd terraform_with_ALB
           terraform plan -no-color -input=false
         continue-on-error: true
