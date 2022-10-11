@@ -2,7 +2,7 @@
 {{-- Page title --}}
 @section('title')
 
-{{ trans('general.dashboard') }}
+{{ trans('general.dashboard 1') }}
 @parent
 @stop
 
