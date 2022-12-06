@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "region"
   type = string
-  default = "ap-south-1"
+  default = "us-east-1"
 }
 variable "my_alb_name" {
   default = "alb-with-terra"
