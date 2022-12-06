@@ -1,3 +1,3 @@
 output "my_alb_dns" {
-  value = module.rohan-alb.elb-dns-name
+  value = module.snipe-alb.elb-dns-name
 }
