@@ -11,15 +11,7 @@ terraform {
     }
   }
 }
-terraform {
-  cloud {
-    organization = "Kesarivamshi"
 
-    workspaces {
-      name = "ecs-terra"
-    }
-  }
-}
 
 terraform {
   backend "s3" {
