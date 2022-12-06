@@ -51,7 +51,7 @@ resource "aws_ecs_task_definition" "snipe-main" {
         },
         {
           "name": "APP_TIMEZONE",
-          "value": "US/Pacific"
+          "value": "UTC"
         },
         {
           "name": "APP_URL",

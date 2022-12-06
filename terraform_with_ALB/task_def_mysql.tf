@@ -55,7 +55,7 @@ resource "aws_ecs_task_definition" "test" {
           },
           {
             "name": "APP_TIMEZONE",
-            "value": "US/Pacific"
+            "value": "UTC"
           },
           {
             "name": "APP_URL",
