@@ -10,7 +10,7 @@ on:
 
 jobs:
   cd:
-    name: "Deployment"
+    name: "Deployment1"
     runs-on: "ubuntu-latest"
   #if: startsWith(github.ref, 'refs/tags/')
     steps:
