@@ -18,6 +18,7 @@ resource "aws_ecs_task_definition" "snipe-main" {
         "options": {
           "awslogs-group": "/ecs/snipe",
           "awslogs-region": "us-east-1",
+          "awslogs-create-group": "true",
           "awslogs-stream-prefix": "ecs"
         }
       },
