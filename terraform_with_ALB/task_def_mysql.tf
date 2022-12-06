@@ -27,8 +27,7 @@ resource "aws_ecs_task_definition" "test" {
           "secretOptions": null,
           "options": {
             "awslogs-group": "/ecs/snipe-mysql",
-            "awslogs-region": "us-east-1",
-            "awslogs-create-group": "true",
+            "awslogs-region": "us-east-1"
             "awslogs-stream-prefix": "ecs"
           }
         },
