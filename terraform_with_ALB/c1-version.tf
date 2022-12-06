@@ -20,6 +20,7 @@ terraform {
     }
   }
 }
+
 terraform {
   backend "s3" {
     bucket = "snipe-terra-tf"
