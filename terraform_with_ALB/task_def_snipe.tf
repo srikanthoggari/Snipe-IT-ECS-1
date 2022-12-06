@@ -17,7 +17,7 @@ resource "aws_ecs_task_definition" "snipe-main" {
         "secretOptions": null,
         "options": {
           "awslogs-group": "/ecs/snipe",
-          "awslogs-region": "ap-south-1",
+          "awslogs-region": "us-east-1",
           "awslogs-stream-prefix": "ecs"
         }
       },
@@ -55,7 +55,7 @@ resource "aws_ecs_task_definition" "snipe-main" {
         },
         {
           "name": "APP_URL",
-          "value": "http://${module.rohan-alb.elb-dns-name}"
+          "value": "http://${module.snipe-alb.elb-dns-name}"
         },
         {
           "name": "MAIL_ENV_ENCRYPTION",
@@ -178,7 +178,7 @@ resource "aws_ecs_service" "test-service-snipe-main" {
     assign_public_ip = true
   }
     load_balancer {
-    target_group_arn = module.rohan-alb.elb-target-group-arn
+    target_group_arn = module.snipe-alb.elb-target-group-arn
     container_name   = "testapp"
     container_port   = 80
   }
