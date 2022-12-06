@@ -2,9 +2,7 @@ name: "destroy"
 on:
   # Manual trigger
   workflow_dispatch:
-  push:
-    paths:
-      - '*/**'
+  
   pull_request:
     branches: [ main ]
 defaults:
