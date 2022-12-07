@@ -35,7 +35,7 @@ resource "aws_ecs_task_definition" "snipe-main" {
       "environment": [
         {
           "name": "APP_DEBUG",
-          "value": "false"
+          "value": "true"
         },
         {
           "name": "APP_ENV",
